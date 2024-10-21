@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>مثال على ملف PDF</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        #download-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #download-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="download-btn" onclick="handleDownlDownloadPdfButtonoadPdf();">تحميل PDF</button>
+
+    <script>
+        const handleDownlDownloadPdfButtonoadPdf = async () => {
+            const data = `<!DOCTYPE html>
+              <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body {
+                        font-family: 'Arial', sans-serif; 
+                        }
+                        blockquote { padding: 10px; padding-inline-start: 20px; background-color: #f7f7f7; border-inline-start: 4px solid #777; border-radius: 7px }
+                        pre, code { direction: ltr; }
+                        h1 { font-size: 24px; margin-bottom: 20px; line-height: 1.6; }
+                        p, li { font-size: 14px; line-height: 1.6;  }
+                        p { margin-bottom: 15px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                        table, th, td { border: 1px solid #ccc; }
+                        th { text-align: center;  background-color: #f7f7f7 }
+                        th, td { padding: 2px 5px; }
+                    </style>
+                    <body>
+                        <table  style="margin-top:10px;">
+                            <thead><tr><th>العمود الأول</th><th>العمود الثاني</th><th>العمود الثالث</th></tr></thead>
+                            <tbody>
+                                <tr><td>بيانات الصف الأول</td><td>بيانات الصف الأول</td><td>بيانات الصف الأول</td></tr>
+                                <tr><td>بيانات الصف الثاني</td><td>بيانات الصف الثاني</td><td>بيانات الصف الثاني</td></tr>
+                                <tr><td>بيانات الصف الثالث</td><td>بيانات الصف الثالث</td><td>بيانات الصف الثالث</td></tr>
+                            </tbody>
+                        </table>
+                    </body>
+                    </html>
+`;
+            try {
+
+
+                fetch('http://localhost:5000/generate-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ htmlContent: data }),
+                })
+                    .then(response => response.blob())  // Get the response as a Blob (binary data)
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);  // Create a URL for the Blob
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'generated.pdf';  // Set the file name for download
+                        document.body.appendChild(a);  // Append link to the document
+                        a.click();  // Simulate a click to download the file
+                        document.body.removeChild(a);  // Clean up the link element
+                    })
+                    .catch(error => console.error('Error generating PDF:', error));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                /*
+            	
+                    const response = await fetch('http://localhost:5000/generate-pdf', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ htmlContent: [data] }), 
+                    });
+                	
+                    */
+            } catch (error) {
+                console.error('Error downloading PDF:', error);
+            }
+
+            // try {
+            //     const response = await fetch('http://localhost:5000/generate-pdf', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //         },
+            //         body: JSON.stringify({ htmlContent: [escapeString(htmlContent)] })
+            //     });
+
+            //     if (!response.ok) {
+            //         throw new Error('Failed to generate PDF');
+            //     }
+
+            //     const blob = await response.blob();
+            //     const url = window.URL.createObjectURL(new Blob([blob]));
+            //     const link = document.createElement('a');
+            //     link.href = url;
+            //     link.setAttribute('download', 'output.pdf');
+            //     document.body.appendChild(link);
+            //     link.click();
+            //     link.parentNode.removeChild(link);
+            // } catch (error) {
+            //     console.error('Error downloading PDF:', error);
+            // }
+        };
+
+
+
+        function escapeString(jsonString) {
+            return jsonString.replace(/[\b\f\n\r\t\\'"]/g, function (char) {
+                switch (char) {
+                    case '\b': return '\\b';
+                    case '\f': return '\\f';
+                    case '\n': return '\\n';
+                    case '\r': return '\\r';
+                    case '\t': return '\\t';
+                    case '\\': return '\\\\';
+                    case '\'': return '\\\'';
+                    case '\"': return '\\\"';
+                    default: return char;
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
